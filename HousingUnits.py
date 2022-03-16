@@ -37,8 +37,9 @@ def most_corr(df, y = 'total', xes = ['Population','Shape__Area','Density','comp
     return greatest_corr_col, greatest_corr
 
 def convert_std_units(ser):
-    s_mean = ser.mean()
-    s_std  = ser.std()
+    ser=ser.astype(float)
+    s_mean = float(ser.mean())
+    s_std  = float(ser.std())
     for index,value in ser.items():
-        ser[index] = (value - s_mean)/(s_std)
+        ser[index] = (float(value) - s_mean)/(s_std)
     return ser
