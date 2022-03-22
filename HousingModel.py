@@ -6,7 +6,7 @@ Program 7: Housing model
 """
 import pandas as pd
 import numpy as np
-from sklearn.linear_model import LinearRegression
+# from sklearn.linear_model import LinearRegression
 
 def make_df(housing_file, pop_file):
     house_df = pd.read_csv(housing_file)
@@ -21,13 +21,22 @@ def make_df(housing_file, pop_file):
 # print(df)
 
 def compute_lin_reg(x,y):
-    reg = LinearRegression().fit(x, y)
-    return reg.intercept_ , reg.coef_
+    # reg = LinearRegression().fit(x, y)
+    # return reg.intercept_ , reg.coef_
+    #manual regression
+    corr_= x.corr(y,method='pearson')
+    x_mean = x.mean()
+    y_mean = y.mean()
+    x_std = x.std()
+    y_std = y.std()
+    theta_1 = corr_ * y_std/x_std
+    theta_0 = y_mean - theta_1*x_mean
+    return theta_0,theta_1
 
 def compute_boro_lr(df,xcol,ycol,boro=["All"]):
-    if boro[0]=='ALL':
+    if boro[0]=='All':
         return compute_lin_reg(df[xcol],df[ycol])
-    df = df[df['Borough']==boro]
+    df = df[df['Borough'].isin(boro)]
     return compute_lin_reg(df[xcol],df[ycol])
 
 def MSE_loss(y_actual,y_estimate):
@@ -37,5 +46,5 @@ def MSE_loss(y_actual,y_estimate):
 def RMSE(y_actual,y_estimate):
     return np.sqrt(MSE_loss(y_actual,y_estimate))
 
-def compute_error(y_actual,y_estimate,loss_fnc):
+def compute_error(y_actual,y_estimate,loss_fnc=MSE_loss):
     return loss_fnc(y_actual,y_estimate)
