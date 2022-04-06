@@ -64,14 +64,14 @@ def add_boro(df, file_name) -> pd.DataFrame:
     # df['DO_borough']=df['DOLocationID'].map(borough_dict)
     # df=df.reset_index(drop=True)
     #using merge
-    df_ = df_['LocationID','borough']
-    df_.rename(columns={'LocationID':'PULocationID'})
+    df_ = df_[['LocationID','borough']]
+    df_ = df_.rename(columns={'LocationID':'PULocationID'})
     #do two merges for pu and do 
     df = df.merge(df_,how='left',on='PULocationID')
-    df.rename(columns={'borough':'PU_borough'})
-    df_.rename(columns={'PULocationID':'DOLocationID'})
+    df = df.rename(columns={'borough':'PU_borough'})
+    df_ = df_.rename(columns={'PULocationID':'DOLocationID'})
     df = df.merge(df_,how='left',on='DOLocationID')
-    df.rename(columns={'borough':'DO_borough'})
+    df = df.rename(columns={'borough':'DO_borough'})
     return df
 
 def add_flags(df) -> pd.DataFrame:
