@@ -58,12 +58,11 @@ def predict_using_trained_model(mod, x, y):
 
 def add_boro(df, file_name) -> pd.DataFrame:
     df_=pd.read_csv(file_name,low_memory=False)
-    #make col from indices of drop off and pickup
-    #use loc to find where the the boroughs are equal,then use that index with boroughs
-    col1= df['PULocationID']
-    col2=df['DOLocationID']
-    df['PU_borough']=df_['borough'].loc[lambda df: df_['LocationID']==df['PULocationID']]
-    df['DO_borough']=df_['borough'].loc[lambda df: df_['LocationID']==df['DOLocationID']]
+    #make dictionary with id and boroughs. make a list of the borughs correspondiung to pu and do
+    borough_dict=dict(zip(df_.LocationID, df_.borough))
+    df['PU_borough']=df['PULocationID'].map(borough_dict)
+    df['DO_borough']=df['DOLocationID'].map(borough_dict)
+    df=df.reset_index(drop=True)
     return df
 
 def add_flags(df) -> pd.DataFrame:
@@ -80,7 +79,7 @@ def add_flags(df) -> pd.DataFrame:
     return df
 
 def encode_categorical_col(col,prefix) -> pd.DataFrame:
-    df = pd.get_dummies(col,prefix=prefix,columns=col)
+    df = pd.get_dummies(col,prefix=prefix,columns=col,prefix_sep='')
     df = df.iloc[: , :-1]
     return df
 
