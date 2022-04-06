@@ -69,10 +69,8 @@ def add_flags(df) -> pd.DataFrame:
     #will attempt with brute force
     df.insert(0,'paid_toll',0)
     df.insert(0,'cross_boro',0)
-    if df['PU_borough'] != df['DO_borough']:
-        df['paid_toll'] = 1
-        df['cross_boro'] = 1
-
+    df['paid_toll'].loc[df['PU_borough'] != df['DO_borough']] = 1
+    df['cross_boro'].loc[df['PU_borough'] != df['DO_borough']] = 1
     return df
 
 def encode_categorical_col(col,prefix) -> pd.DataFrame:
