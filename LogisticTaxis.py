@@ -88,7 +88,7 @@ def encode_categorical_col(col,prefix) -> pd.DataFrame:
     return df
 
 def split_test_train(df, xes_col_names, y_col_name, test_size=0.25, random_state=12345):
-    X_train, X_test, y_train, y_test = train_test_split(df[xes_col_names], df[y_col_name], test_size=0.33, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(df[xes_col_names], df[y_col_name], test_size=test_size, random_state=random_state)
     return X_train, X_test, y_train, y_test
 
 def fit_logistic_regression(x_train, y_train,penalty='none',max_iter=1000) -> object:
