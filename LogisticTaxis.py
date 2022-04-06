@@ -59,10 +59,19 @@ def predict_using_trained_model(mod, x, y):
 def add_boro(df, file_name) -> pd.DataFrame:
     df_=pd.read_csv(file_name,low_memory=False)
     #make dictionary with id and boroughs. make a list of the borughs correspondiung to pu and do
-    borough_dict=dict(zip(df_.LocationID, df_.borough))
-    df['PU_borough']=df['PULocationID'].map(borough_dict)
-    df['DO_borough']=df['DOLocationID'].map(borough_dict)
-    df=df.reset_index(drop=True)
+    # borough_dict=dict(zip(df_.LocationID, df_.borough))
+    # df['PU_borough']=df['PULocationID'].map(borough_dict)
+    # df['DO_borough']=df['DOLocationID'].map(borough_dict)
+    # df=df.reset_index(drop=True)
+    #using merge
+    df_ = df_['LocationID','borough']
+    df_.rename(columns={'LocationID':'PULocationID'})
+    #do two merges for pu and do 
+    df = df.merge(df_,how='left',on='PULocationID')
+    df.rename(columns={'borough':'PU_borough'})
+    df_.rename(columns={'PULocationID':'DOLocationID'})
+    df = df.merge(df_,how='left',on='DOLocationID')
+    df.rename(columns={'borough':'DO_borough'})
     return df
 
 def add_flags(df) -> pd.DataFrame:
