@@ -66,15 +66,12 @@ def add_boro(df, file_name) -> pd.DataFrame:
     return df
 
 def add_flags(df) -> pd.DataFrame:
-    #add two bool col
-    #this way uses np.where()
-    # df['paid_toll']=
-    # df['cross_boro']=
     #will attempt with brute force
     df.insert(0,'paid_toll',0)
     df.insert(0,'cross_boro',0)
-    # if df['PU_borough'] == df['DO_borough']:
-    #     df['paid_toll'] = 0
+    if df['PU_borough'] != df['DO_borough']:
+        df['paid_toll'] = 1
+        df['cross_boro'] = 1
 
     return df
 
