@@ -19,15 +19,15 @@ def select_data(data, target, labels = [0,1]):
     # num_dict = dict(zip(target,data))
     # res = dict((k, num_dict[k]) for k in labels if k in num_dict)
     # return list(res.values()), list(res.keys())
-    data_df = np.array()
-    target_df = np.array()
+    data_ = []
+    target_ = []
     index_ = 0
     for r in target:
         if r in labels:
-            data_df.append(data[index_])
-            target_df.append(r)
+            data_.append(data[index_])
+            target_.append(r)
         index_ = index_ + 1
-    return data_df , target_df
+    return tuple(data_),tuple(target_)
 
 def split_data(data, target, test_size = 0.25, random_state = 21):
     X_train, X_test, y_train, y_test = train_test_split(data, target, test_size=test_size, random_state=random_state,stratify=target)
