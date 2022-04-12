@@ -5,7 +5,6 @@ Resources:  Used python.org as a reminder of Python 3 print statements.
 Classifying Digits
 """
 from cgi import test
-from tkinter import X
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
@@ -13,10 +12,22 @@ from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix
 import pickle
+import pandas as pd
+import numpy as np
 
 def select_data(data, target, labels = [0,1]):
-    num_dict = dict(zip(target,data))
-    return labels.map(num_dict)
+    # num_dict = dict(zip(target,data))
+    # res = dict((k, num_dict[k]) for k in labels if k in num_dict)
+    # return list(res.values()), list(res.keys())
+    data_df = np.array()
+    target_df = np.array()
+    index_ = 0
+    for r in target:
+        if r in labels:
+            data_df.append(data[index_])
+            target_df.append(r)
+        index_ = index_ + 1
+    return data_df , target_df
 
 def split_data(data, target, test_size = 0.25, random_state = 21):
     X_train, X_test, y_train, y_test = train_test_split(data, target, test_size=test_size, random_state=random_state,stratify=target)
@@ -42,11 +53,13 @@ def fit_model(x_train, y_train, model_type='logreg'):
         return picklestring
 
 def predict_model(mod_pkl, xes):
-    y_estimate = mod_pkl.predict(xes)
+    clf = pickle.loads(mod_pkl)
+    y_estimate = clf.predict(xes)
     return y_estimate
 
 def score_model(mod_pkl,xes,yes):
-    y_estimate = mod_pkl.predict(xes)
+    clf = pickle.loads(mod_pkl)
+    y_estimate = clf.predict(xes)
     return confusion_matrix(yes, y_estimate)
 
 def compare_models(data, target, test_size = 0.25, random_state = 21, models = ['logreg','nbayes','svm','rforest']):
