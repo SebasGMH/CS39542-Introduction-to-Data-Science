@@ -55,16 +55,7 @@ def average_eigenvalue(mod):
     return elem
 
 def approx_digits(mod, img, numComponents=8):
-    """
-    :param mod:pca model fitted to dataset
-    :param img: flatend image
-    :param numComponents: 0<x<64
-    :return: approximation image as a flattend array
-    """
-    # pca = PCA(n_components=numComponents)
-    # img_val = pca.fit_transform(img)
-    t_img = img[:numComponents]
-    for x in range(len(t_img)):
-        t_img[x] = t_img[x]*mod.components_[x]
-    t_img.insert(0,mod.mean_)
-    return t_img
+    approx = mod.mean_
+    for i in range(numComponents):
+      approx += img[i] * mod.components_[i]
+    return(approx)
